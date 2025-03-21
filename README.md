@@ -27,4 +27,9 @@ Cache Service(Redis): A caching layer using Redis will be used to speed up the a
 3. Image Build: docker build -t imagename .
 4. Image Tag: docker tag localreponame:tag dockerreponame:tag  [when pushing to docker hub]
 5. Image Push: docker push dockerreponame:tag
+6. Container Run: docker run image:tag
+7. Docker compose build: docker-compose build
+8. Docker compose run: docker-compose up
+9. Docker compose stop: docker-compose down
+10. Docker compose logs: docker-compose logs servicename
 
