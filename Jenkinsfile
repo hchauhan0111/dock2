@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     echo "docker push "
-                    docker.withRegistry('https://hub.docker.com/repositories/himanshuchauhan1', 'docker-hub-credentials') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
                         sh 'docker tag dock_frontend:latest himanshuchauhan1/dock_frontend:latest'
                         sh 'docker tag dock_backend:latest himanshuchauhan1/dock_backend:latest'
                         sh 'docker push himanshuchauhan1/dock_frontend:latest'
