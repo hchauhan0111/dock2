@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Github Repo Checkout') {
             steps {
-                git credentialsId: 'github-pat-token', url: "$GIT_REPO"
+                git credentialsId: 'github-pat-token', url: "$GIT_REPO", branch: 'main'
             }
         }
 
@@ -37,7 +37,8 @@ pipeline {
         stage('Docker Compose Up') {
             steps {
                 script {
-                    sh 'docker-compose up -d'
+                    echo "UP Compose"
+                    //sh 'docker-compose up -d'
                 }
             }
         }
