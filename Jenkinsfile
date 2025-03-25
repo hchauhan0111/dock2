@@ -25,10 +25,10 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://hub.docker.com/repositories/himanshuchauhan1', 'docker-hub-credentials') {
-                        sh 'docker tag himanshu_frontend:latest himanshuchauhan1/himanshu_frontend:latest'
-                        sh 'docker tag himanshu_backend:latest himanshuchauhan1/himanshu_backend:latest'
-                        sh 'docker push himanshuchauhan1/himanshu_frontend:latest'
-                        sh 'docker push himanshuchauhan1/himanshu_backend:latest'
+                        sh 'docker tag dock_frontend:latest himanshuchauhan1/dock_frontend:latest'
+                        sh 'docker tag dock_backend:latest himanshuchauhan1/dock_backend:latest'
+                        sh 'docker push himanshuchauhan1/dock_frontend:latest'
+                        sh 'docker push himanshuchauhan1/dock_backend:latest'
                     }
                 }
             }
