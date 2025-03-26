@@ -39,7 +39,7 @@ pipeline {
             steps {
                 script {
                     echo "UP Compose"
-                    //sh 'docker-compose up -d'
+                    sh 'docker-compose up'
                 }
             }
         }
