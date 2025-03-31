@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(name: 'UPDOWN_OPTION', choices: ['up', 'down'], description: 'Choose whether to bring the containers up or down')
+    }
+
     environment {
         GIT_REPO = 'https://github.com/hchauhan0111/dock2.git'
         //DOCKER_IMAGE = 'your-dockerhub-username/your-image-name'
@@ -36,10 +40,29 @@ pipeline {
         }
 
         stage('Docker Compose Up') {
+            when {
+                expression {
+                    return params.UPDOWN_OPTION == 'up'
+                }
+            }
             steps {
                 script {
-                    echo "UP Compose"
-                    sh 'docker-compose up'
+                    echo "Starting Docker Compose Up"
+                    sh 'docker-compose up -d'  
+                }
+            }
+        }
+
+        stage('Docker Compose Down') {
+            when {
+                expression {
+                    return params.UPDOWN_OPTION == 'down'
+                }
+            }
+            steps {
+                script {
+                    echo "Stopping Docker Compose Down"
+                    sh 'docker-compose down'
                 }
             }
         }
