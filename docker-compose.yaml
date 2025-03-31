@@ -2,26 +2,26 @@ version: "3.3"
 
 services:
   backend:
-    build: ./backend_service
+    image: himanshuchauhan1/dock_backend:latest  
     container_name: backend
     ports:
       - "5000:5000"
     depends_on:
       - database
-      - redis  # Add Redis dependency
+      - redis
     environment:
       DB_USER: invue
       DB_PASS: invue!
       DB_NAME: local_testing_db
       DB_HOST: postgres_db
       DB_PORT: 5432
-      REDIS_HOST: redis    # Redis container name (you'll use this in the backend to connect to Redis)
-      REDIS_PORT: 6379     # Default Redis port
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     networks:
       - app-network
 
   frontend:
-    build: ./my-react-app
+    image: himanshuchauhan1/dock_frontend:latest  
     container_name: frontend
     ports:
       - "3000:80"
@@ -46,10 +46,10 @@ services:
       - app-network
 
   redis:
-    image: redis:latest   # Use the official Redis image
+    image: redis:latest
     container_name: redis
     ports:
-      - "6379:6379"       # Expose Redis default port
+      - "6379:6379"
     networks:
       - app-network
 
@@ -57,6 +57,5 @@ volumes:
   pg_data:
 
 networks:
-  app-network:           # Define a custom network to connect all services
+  app-network:
     driver: bridge
-
