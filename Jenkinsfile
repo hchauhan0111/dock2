@@ -18,6 +18,11 @@ pipeline {
         }
 
         stage('Docker Compose Build') {
+            when {
+                expression {
+                    return params.UPDOWN_OPTION == 'up'
+                }
+            }
             steps {
                 script {
                     sh 'docker-compose build'
@@ -26,9 +31,14 @@ pipeline {
         }
 
         stage('Push to Docker Hub') {
+            when {
+                expression {
+                    return params.UPDOWN_OPTION == 'up'
+                }
+            }
             steps {
                 script {
-                    echo "docker push "
+                    echo "Pushing images to Docker Hub"
                     docker.withRegistry('https://index.docker.io/v1/', 'docker-hub-credentials') {
                         sh 'docker tag dock_frontend:latest himanshuchauhan1/dock_frontend:latest'
                         sh 'docker tag dock_backend:latest himanshuchauhan1/dock_backend:latest'
