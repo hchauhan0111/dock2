@@ -25,8 +25,8 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker build -t dock_frontend ./frontend'
-                    sh 'docker build -t dock_backend ./backend'
+                    sh 'docker build -t dock_frontend ./my-react-app'
+                    sh 'docker build -t dock_backend ./backend_service'
                 }
             }
         }
