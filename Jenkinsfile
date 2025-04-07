@@ -25,7 +25,8 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'docker-compose build'
+                    sh 'docker build -t dock_frontend .'
+                    sh 'docker build -t dock_backend .'
                 }
             }
         }
