@@ -1,18 +1,18 @@
-# Use Node.js base image
-FROM node:18
+# Stage 1: Build Stage
+FROM node:18 AS build
 
-# Set the working directory
 WORKDIR /app
 
-# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application
 COPY . .
 
-# Expose port (should match your server PORT)
-EXPOSE 5000
+# Stage 2: Production Stage
+FROM node:18-slim
 
-# Start the backend service
+WORKDIR /app
+COPY --from=build /app /app
+EXPOSE 5000
 CMD ["node", "index.js"]
+
