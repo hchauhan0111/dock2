@@ -1,18 +1,51 @@
-name: Docker Image CI
+name: Build Docker Images
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git for pushing changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Read and increment build count
+        id: build-count
+        run: |
+          count=$(cat build-count.txt)
+          echo "Current build count: $count"
+          new_count=$((count + 1))
+          echo "$new_count" > build-count.txt
+          echo "BUILD_TAG=v1-build-$new_count" >> $GITHUB_ENV
+          echo "New build count: $new_count"
+
+      - name: Commit updated build count
+        run: |
+          git add build-count.txt
+          git commit -m "chore: bump build count to ${{ env.BUILD_TAG }}"
+          git push
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERUSERNAME }}
+          password: ${{ secrets.DOCKERPASSWORD }}
+
+      - name: Build and push backend_service Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKERUSERNAME }}/backend_service:${{ env.BUILD_TAG }} ./backend_service
+          docker push ${{ secrets.DOCKERUSERNAME }}/backend_service:${{ env.BUILD_TAG }}
+
+      - name: Build and push my-react-app Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKERUSERNAME }}/my-react-app:${{ env.BUILD_TAG }} ./my-react-app
+          docker push ${{ secrets.DOCKERUSERNAME }}/my-react-app:${{ env.BUILD_TAG }}
