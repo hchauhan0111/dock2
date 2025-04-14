@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read  # Required to fetch git tags
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,27 +15,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Important: fetch all tags
 
-      - name: Set up Git for pushing changes
+      - name: Set up Git
         run: |
           git config --global user.name "hchauhan0111"
           git config --global user.email "himanshu.chauhan@nagarro.com"
 
-      - name: Read and increment build count
+      - name: Determine build tag from Git tags
         id: build-count
         run: |
-          count=$(cat build-count.txt)
-          echo "Current build count: $count"
-          new_count=$((count + 1))
-          echo "$new_count" > build-count.txt
-          echo "BUILD_TAG=v1-build-$new_count" >> $GITHUB_ENV
-          echo "New build count: $new_count"
-
-      - name: Commit updated build count
-        run: |
-          git add build-count.txt
-          git commit -m "chore: bump build count to ${{ env.BUILD_TAG }}"
-          git push
+          latest_tag=$(git tag --list 'v1-build-*' | sed 's/v1-build-//' | sort -n | tail -1)
+          echo "Latest build number: ${latest_tag:-0}"
+          next_count=$((latest_tag + 1))
+          tag="v1-build-$next_count"
+          echo "BUILD_TAG=$tag" >> $GITHUB_ENV
+          echo "Using tag: $tag"
 
       - name: Log in to DockerHub
         uses: docker/login-action@v3
