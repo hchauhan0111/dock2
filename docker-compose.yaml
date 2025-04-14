@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   backend:
-    image: himanshuchauhan1/dock_backend:latest  
+    image: himanshuchauhan1/backend_service:latest  
     container_name: backend
     ports:
       - "5000:5000"
@@ -21,7 +21,7 @@ services:
       - app-network
 
   frontend:
-    image: himanshuchauhan1/dock_frontend:latest  
+    image: himanshuchauhan1/my-react-app:latest  
     container_name: frontend
     ports:
       - "3000:80"
